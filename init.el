@@ -16,8 +16,14 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
+;; This is only needed once, near the top of the file
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  ;; (add-to-list 'load-path "")
+  (require 'use-package))
+
 ;; themes
-(require 'kaolin-themes)
+(use-package kaolin-themes)
 (load-theme 'kaolin-ocean t)
 (kaolin-treemacs-theme)
 
@@ -31,7 +37,7 @@
 (add-hook 'window-setup-hook 'on-after-init)
 
 ;; overriding keybindings
-(require 'bind-key)
+(use-package bind-key)
 
 ;; miscellaneous keybindings
 (bind-keys*
@@ -132,24 +138,8 @@ point reaches the beginning or end of the buffer, stop there."
 (setq-default fill-column 80)
 
 ;; Haskell mode
-(load "~/.emacs.d/haskell-mode/haskell-site-file")
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-(add-hook 'haskell-mode-hook
-		  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+(use-package haskell-mode)              ;TODO: check
 
-;; applescript mode
-;; (load "~/.emacs.d/applescript-mode/applescript-mode")
-;; (autoload 'applescript-mode "applescript-mode"
-;;   "Major mode for editing AppleScript source." t)
-;; (add-to-list 'auto-mode-alist '("\\.applescript$" . applescript-mode))
-
-;; wikipedia mode:
-(autoload 'wikipedia-mode
-  "~/.emacs.d/wikipedia-mode.el"
-  "Major mode for editing documents in Wikipedia markup." t)
-(setq auto-mode-alist
-      (cons '("\\.wiki\\'" . wikipedia-mode) auto-mode-alist))
 
 ;; LaTeX/AucTeX stuff:
 (setq TeX-auto-save t)
@@ -253,10 +243,10 @@ the checking happens for all pairs in auto-minor-mode-alist"
             auto-minor-mode-alist))
 
 ;; Auto-complete mode:
-(require 'auto-complete)
+(use-package auto-complete)
 (ac-config-default)
 (ac-set-trigger-key "TAB")
-(require 'auto-complete-auctex)
+(use-package auto-complete-auctex)
 
 (defun my-csharp-mode-hook ()
   ;; enable the stuff you want for C# here
@@ -306,11 +296,11 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;; (icy-mode 1)
 
 ;; Search all open buffers, super useful
-(require 'cl)
+(use-package cl)
 (defcustom search-all-buffers-ignored-files (list (rx-to-string '(and bos (or ".bash_history" "TAGS") eos)))
   "Files to ignore when searching buffers via \\[search-all-buffers]."
   :type 'editable-list)
-(require 'grep)
+(use-package grep)
 (defun search-all-buffers (regexp prefix)
     "Searches file-visiting buffers for occurence of REGEXP.  With
 prefix > 1 (i.e., if you type C-u \\[search-all-buffers]),
@@ -339,7 +329,7 @@ searches all buffers."
 
 ;; use flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
-(require 'flycheck-cython)
+(use-package flycheck-cython)
 (add-hook 'cython-mode-hook 'flycheck-mode)
 
 ;; jedi (autocompletion for python)
@@ -347,9 +337,9 @@ searches all buffers."
 (setq jedi:complete-on-dot t)
 (setq jedi:use-shortcuts 1)
 
-;; Other python stuff
+;; auto-docstrings in python
+(use-package sphinx-doc)
 (add-hook 'python-mode-hook (lambda ()
-                              (require 'sphinx-doc)
                               (sphinx-doc-mode t)
                               (bind-key* "C-c C-d" 'sphinx-doc)))
 
@@ -357,10 +347,10 @@ searches all buffers."
 (add-hook 'markdown-mode-hook 'pandoc-mode)
 
 (package-initialize)
-(require 'ein)
-(require 'ein-loaddefs)
-(require 'ein-notebook)
-(require 'ein-subpackages)
+(use-package ein)
+(use-package ein-loaddefs)
+(use-package ein-notebook)
+(use-package ein-subpackages)
 
 (defun mg-TeX-insert-single-quote (force)
   "Insert the appropriate quotation marks for TeX.
@@ -409,6 +399,7 @@ FORCE, always inserts ' characters."
 (eval-after-load "tex"
   '(define-key LaTeX-mode-map (kbd "'") 'mg-TeX-insert-single-quote))
 
+;; TODO: deal with this
 ;; POV-Ray mode stuff
 (add-to-list 'load-path "~/.emacs.d/elpa/pov-mode-20161115.743/pov-mode.el")
 (autoload 'pov-mode "pov-mode" "PoVray scene file mode" t)
@@ -444,7 +435,6 @@ FORCE, always inserts ' characters."
 
 (fset 'full-points
       "\C-[xreplace-regexp\C-m /\\([0-9]+\\)\C-m \\1/\\1\C-m")
-
 (defun my-text-mode-hook ()
   ;; enable the stuff you want for .txt files here
   (bind-key "C-c C-f" 'full-points)
