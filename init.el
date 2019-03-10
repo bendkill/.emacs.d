@@ -4,8 +4,44 @@
 ;;
 ;;; Code:
 
+;; should be at top
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(cursor-type (quote bar))
+ '(custom-safe-themes
+   (quote
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "bc75dfb513af404a26260b3420d1f3e4131df752c19ab2984a7c85def9a2917e" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
+ '(font-latex-user-keyword-classes
+   (quote
+    (("think"
+      (("think" "{"))
+      font-latex-italic-face command))))
+ '(package-selected-packages
+   (quote
+    (smart-mode-line-atom-one-dark-theme
+     smart-mode-line-powerline-theme smart-mode-line
+     doom-modeline arjen-grey-theme abyss-theme dracula-theme
+     magit-popup magit highlight-numbers kaolin-themes jedi
+     sphinx-doc irony pov-mode markdown-mode js2-mode ein
+     anaconda-mode flycheck flycheck-cython cython-mode zotelo
+     synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper
+     mediawiki icicles helm git fireplace exec-path-from-shell
+     chess auto-complete-auctex auctex)))
+     '(safe-local-variable-values (quote ((tex-master
+     . "vanesh")))))
+
+
 ;; emacs load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+
+;; adjust the background of the loaded theme
+(defun on-after-init ()
+  (unless (display-graphic-p (selected-frame))
+    (set-face-background 'default "unspecified-bg" (selected-frame))))
+(add-hook 'window-setup-hook 'on-after-init)
 
 ;; Using Melpa
 (require 'package)
@@ -22,19 +58,18 @@
   ;; (add-to-list 'load-path "")
   (require 'use-package))
 
-;; themes
+;; themes and appearance
 (use-package kaolin-themes)
 (load-theme 'kaolin-ocean t)
 (kaolin-treemacs-theme)
 
+;; change the mode-line
+(use-package smart-mode-line)
+(setq sml/theme 'respectful)
+(sml/setup)
+
 ;; other highlighting
 (add-hook 'prog-mode-hook 'highlight-numbers-mode)
-
-;; adjust the background of the loaded theme
-(defun on-after-init ()
-  (unless (display-graphic-p (selected-frame))
-    (set-face-background 'default "unspecified-bg" (selected-frame))))
-(add-hook 'window-setup-hook 'on-after-init)
 
 ;; overriding keybindings
 (use-package bind-key)
@@ -134,7 +169,6 @@ point reaches the beginning or end of the buffer, stop there."
           'smarter-move-beginning-of-line)
 
 ;; Miscellaneous variable assignments
-(setq column-number-mode t)
 (setq-default fill-column 80)
 
 ;; Haskell mode
@@ -274,23 +308,6 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-;; My custom 'think' command in latex
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(cursor-type (quote bar))
- '(font-latex-user-keyword-classes
-   (quote
-    (("think"
-      (("think" "{"))
-      font-latex-italic-face command))))
- '(package-selected-packages
-   (quote
-    (arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
- '(safe-local-variable-values (quote ((tex-master . "vanesh")))))
 
 ;; Start icicles for every emacs
 ;; (icy-mode 1)
@@ -448,6 +465,31 @@ FORCE, always inserts ' characters."
   )
 (bind-key* "C-c m" 'magit-status)
 
+;; Create a tags file
+(defun create-tags (dir-name)
+  "Create tags file."
+  (interactive "DDirectory: ")
+  (eshell-command
+   (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
+;; Auto refresh of the tags file
+(defadvice find-tag (around refresh-etags activate)
+  "Rerun etags and reload tags if tag not found and redo find-tag.
+   If buffer is modified, ask about save before running etags."
+  (let ((extension (file-name-extension (buffer-file-name))))
+    (condition-case err
+        ad-do-it
+      (error (and (buffer-modified-p)
+                  (not (ding))
+                  (y-or-n-p "Buffer is modified, save it? ")
+                  (save-buffer))
+             (er-refresh-etags extension)
+             ad-do-it))))
+(defun er-refresh-etags (&optional extension)
+  "Run etags on all peer files in current dir and reload them silently."
+  (interactive)
+  (shell-command (format "etags *.%s" (or extension "el")))
+  (let ((tags-revert-without-query t))  ; don't query, revert silently
+        (visit-tags-table default-directory nil)))
 
 ;;; init.el ends here
