@@ -21,17 +21,8 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (smart-mode-line-atom-one-dark-theme
-     smart-mode-line-powerline-theme smart-mode-line
-     doom-modeline arjen-grey-theme abyss-theme dracula-theme
-     magit-popup magit highlight-numbers kaolin-themes jedi
-     sphinx-doc irony pov-mode markdown-mode js2-mode ein
-     anaconda-mode flycheck flycheck-cython cython-mode zotelo
-     synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper
-     mediawiki icicles helm git fireplace exec-path-from-shell
-     chess auto-complete-auctex auctex)))
-     '(safe-local-variable-values (quote ((tex-master
-     . "vanesh")))))
+    (nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+ '(safe-local-variable-values (quote ((tex-master . "vanesh")))))
 
 
 ;; emacs load path
@@ -128,6 +119,8 @@ Version 2016-06-15"
 (setq default-tab-width 2)
 (setq-default indent-tabs-mode nil)
 (setq python-indent-offset 2)
+(setq c-default-style "bsd"
+      c-basic-offset 4)
 
 ;; Toggle transparecy when in graphical mode with "C-c t"
 (defun toggle-transparency ()
