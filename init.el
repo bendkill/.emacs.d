@@ -356,12 +356,6 @@ searches all buffers."
 ;; pandoc mode
 (add-hook 'markdown-mode-hook 'pandoc-mode)
 
-(package-initialize)
-(use-package ein)
-(use-package ein-loaddefs)
-(use-package ein-notebook)
-(use-package ein-subpackages)
-
 (defun mg-TeX-insert-single-quote (force)
   "Insert the appropriate quotation marks for TeX.
 Inserts ` or ' depending on the context.  With prefix argument
