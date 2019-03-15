@@ -21,7 +21,7 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+    (helm-ag google-this nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
  '(safe-local-variable-values (quote ((tex-master . "vanesh")))))
 
 
@@ -69,6 +69,7 @@
 (bind-keys*
  ;; ("M-m" . menu-bar-open)
  ("C-c a" . auto-fill-mode)
+ ("C-c o" . olivetti-mode)
  ("C-x a" . align-regexp)
  ("C-c r" . replace-string)
  ("C-c d" . delete-trailing-whitespace)
@@ -260,14 +261,17 @@ the checking happens for all pairs in auto-minor-mode-alist"
       (cons '("\\.txt\\'" . olivetti-mode)
             auto-minor-mode-alist))
 (setq auto-minor-mode-alist
-      (cons '("\\.rtf\\'" . olivetti-mode)
-            auto-minor-mode-alist))
-(setq auto-minor-mode-alist
-      (cons '("\\.wiki\\'" . olivetti-mode)
-            auto-minor-mode-alist))
-(setq auto-minor-mode-alist
       (cons '("\\.tex\\'" . olivetti-mode)
             auto-minor-mode-alist))
+
+;; autofill mode, same thing
+(setq auto-minor-mode-alist
+      (cons '("\\.txt\\'" . auto-fill-mode)
+            auto-minor-mode-alist))
+(setq auto-minor-mode-alist
+      (cons '("\\.tex\\'" . auto-fill-mode)
+            auto-minor-mode-alist))
+
 
 ;; Auto-complete mode:
 (use-package auto-complete)
@@ -305,27 +309,8 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;; Start icicles for every emacs
 ;; (icy-mode 1)
 
-;; Search all open buffers, super useful
-(use-package cl)
-(defcustom search-all-buffers-ignored-files (list (rx-to-string '(and bos (or ".bash_history" "TAGS") eos)))
-  "Files to ignore when searching buffers via \\[search-all-buffers]."
-  :type 'editable-list)
-(use-package grep)
-(defun search-all-buffers (regexp prefix)
-    "Searches file-visiting buffers for occurence of REGEXP.  With
-prefix > 1 (i.e., if you type C-u \\[search-all-buffers]),
-searches all buffers."
-    (interactive (list (grep-read-regexp)
-                       current-prefix-arg))
-    (message "Regexp is %s; prefix is %s" regexp prefix)
-    (multi-occur
-     (if (member prefix '(4 (4)))
-         (buffer-list)
-       (remove-if
-        (lambda (b) (some (lambda (rx) (string-match rx  (file-name-nondirectory (buffer-file-name b)))) search-all-buffers-ignored-files))
-        (remove-if-not 'buffer-file-name (buffer-list))))
-     regexp))
-(bind-key* "M-s M-s" 'search-all-buffers)
+(bind-key* "M-s M-s" 'helm-ag)
+(bind-key* "M-s M-g" 'helm-do-ag)
 
 ;; windmove
 (when (fboundp 'windmove-default-keybindings)
@@ -478,5 +463,8 @@ FORCE, always inserts ' characters."
   (shell-command (format "etags *.%s" (or extension "el")))
   (let ((tags-revert-without-query t))  ; don't query, revert silently
         (visit-tags-table default-directory nil)))
+
+(google-this-mode 1)
+
 
 ;;; init.el ends here
