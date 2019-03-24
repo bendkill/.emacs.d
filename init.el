@@ -309,8 +309,8 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;; Start icicles for every emacs
 ;; (icy-mode 1)
 
-(bind-key* "M-s M-s" 'helm-ag)
-(bind-key* "M-s M-g" 'helm-do-ag)
+(bind-key* "M-s M-s" 'helm-ag-project-root)
+(bind-key* "M-s M-g" 'helm-ag-buffers)
 
 ;; windmove
 (when (fboundp 'windmove-default-keybindings)
@@ -428,7 +428,7 @@ FORCE, always inserts ' characters."
   ;; enable the stuff you want for .txt files here
   (bind-key "C-c C-f" 'full-points)
   )
-;; (add-hook 'text-mode-hook 'my-text-mode-hook)
+(add-hook 'text-mode-hook 'my-text-mode-hook)
 
 ;; magit things
 (use-package magit-popup
