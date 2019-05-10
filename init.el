@@ -21,7 +21,7 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (helm-ag google-this nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+    (evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
  '(safe-local-variable-values (quote ((tex-master . "vanesh")))))
 
 
@@ -72,6 +72,7 @@
  ("C-c o" . olivetti-mode)
  ("C-x a" . align-regexp)
  ("C-c r" . replace-string)
+ ("C-c C-r" . replace-regexp)
  ("C-c d" . delete-trailing-whitespace)
  ("C--"   . undo)
  ("C-M-f" . forward-whitespace)
@@ -120,6 +121,7 @@ Version 2016-06-15"
 (setq default-tab-width 2)
 (setq-default indent-tabs-mode nil)
 (setq python-indent-offset 2)
+(setq sml-indent-level 2)
 (setq c-default-style "bsd"
       c-basic-offset 4)
 
@@ -279,25 +281,25 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (ac-set-trigger-key "TAB")
 (use-package auto-complete-auctex)
 
-(defun my-csharp-mode-hook ()
-  ;; enable the stuff you want for C# here
-  ;; (electric-pair-mode 1)       ;; Emacs 24
-  ;; (electric-pair-local-mode 1) ;; Emacs 25
-  (omnisharp-mode)
-  (auto-complete-mode)
-  (setq indent-tabs-mode nil)
-  (setq c-syntactic-indentation t)
-  (c-set-style "ellemtel")
-  (setq c-basic-offset 2)
-  (setq truncate-lines t)
-  (setq tab-width 2)
-  (setq evil-shift-width 2)
-  (local-set-key (kbd "C-c C-c") 'recompile)
-  )
-(add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
-(eval-after-load
-    'company
-  '(add-to-list 'company-backends 'company-omnisharp))
+;; (defun my-csharp-mode-hook ()
+;;   ;; enable the stuff you want for C# here
+;;   ;; (electric-pair-mode 1)       ;; Emacs 24
+;;   ;; (electric-pair-local-mode 1) ;; Emacs 25
+;;   (omnisharp-mode)
+;;   (auto-complete-mode)
+;;   (setq indent-tabs-mode nil)
+;;   (setq c-syntactic-indentation t)
+;;   (c-set-style "ellemtel")
+;;   (setq c-basic-offset 2)
+;;   (setq truncate-lines t)
+;;   (setq tab-width 2)
+;;   (setq evil-shift-width 2)
+;;   (local-set-key (kbd "C-c C-c") 'recompile)
+;;   )
+;; (add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
+;; (eval-after-load
+;;     'company
+;;   '(add-to-list 'company-backends 'company-omnisharp))
 
 ;; Better C stuff
 (add-hook 'c-mode-hook 'auto-complete-mode)
@@ -462,9 +464,20 @@ FORCE, always inserts ' characters."
   (interactive)
   (shell-command (format "etags *.%s" (or extension "el")))
   (let ((tags-revert-without-query t))  ; don't query, revert silently
-        (visit-tags-table default-directory nil)))
+    (visit-tags-table default-directory nil)))
 
-(google-this-mode 1)
+
+;; java shit
+(add-hook 'java-mode-hook (lambda ()
+                            (setq c-basic-offset 2
+                                  tab-width 2
+                                  indent-tabs-mode nil)))
+
+;; scala shit
+;; (use-package ensime
+;;   :ensure t
+;;   :pin melpa-stable)
+;; (add-to-list 'exec-path "/usr/local/bin")
 
 
 ;;; init.el ends here
