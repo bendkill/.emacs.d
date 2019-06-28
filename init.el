@@ -21,8 +21,12 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
- '(safe-local-variable-values (quote ((tex-master . "vanesh")))))
+    (racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+ '(safe-local-variable-values
+   (quote
+    ((TeX-command-extra-options . "-shell-escape")
+     (tex-master . "vanesh"))))
+ '(send-mail-function (quote mailclient-send-it)))
 
 
 ;; emacs load path
@@ -36,18 +40,17 @@
 
 ;; Using Melpa
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(setq
+ package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                    ("org" . "http://orgmode.org/elpa/")
+                    ("melpa" . "http://melpa.org/packages/")
+                    ("melpa-stable" . "http://stable.melpa.org/packages/"))
+ package-archive-priorities '(("melpa-stable" . 1)))
 (package-initialize)
-
-;; This is only needed once, near the top of the file
-(eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  ;; (add-to-list 'load-path "")
-  (require 'use-package))
+(when (not package-archive-contents)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
 
 ;; themes and appearance
 (use-package kaolin-themes)
@@ -474,10 +477,10 @@ FORCE, always inserts ' characters."
                                   indent-tabs-mode nil)))
 
 ;; scala shit
-;; (use-package ensime
-;;   :ensure t
-;;   :pin melpa-stable)
-;; (add-to-list 'exec-path "/usr/local/bin")
+(use-package ensime
+  :ensure t
+  :pin melpa-stable)
 
+(use-package auto-package-update)
 
 ;;; init.el ends here
