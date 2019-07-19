@@ -79,7 +79,9 @@
  ("C-c d" . delete-trailing-whitespace)
  ("C--"   . undo)
  ("C-M-f" . forward-whitespace)
- ("M-," . previous-buffer))
+ ("M-," . previous-buffer)
+ ("C-M-p" . comint-previous-input)
+ ("C-M-n" . comint-next-input))
 
 (bind-key* "C-c l" '(lambda() (interactive) (load-file "~/.emacs.d/init.el")
                       (unless (display-graphic-p (selected-frame))
@@ -92,6 +94,7 @@
                                              (region-beginning)
                                              (region-end)
                                              "pbcopy" (messages-buffer))))
+
 
 
 (defun xah-forward-block (&optional n)
@@ -342,6 +345,19 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'python-mode-hook (lambda ()
                               (sphinx-doc-mode t)
                               (bind-key* "C-c C-d" 'sphinx-doc)))
+
+;; python shell
+(setq
+ python-shell-interpreter "ipython3"
+ python-shell-interpreter-args "--colors=Linux --profile=default"
+ python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+ python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+ python-shell-completion-setup-code
+ "from IPython.core.completerlib import module_completion"
+ python-shell-completion-module-string-code
+ "';'.join(module_completion('''%s'''))\n"
+ python-shell-completion-string-code
+ "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
 ;; pandoc mode
 (add-hook 'markdown-mode-hook 'pandoc-mode)
