@@ -327,7 +327,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
 (add-hook 'elpy-mode-hook (lambda ()
                             (bind-key* "C-x M-." 'elpy-goto-definition-other-window)
-                            (bind-key* "M-," 'pop-tag-mark))
+                            (bind-key* "M-," 'pop-tag-mark)))
 
 ;; auto-docstrings in python
 (use-package sphinx-doc)
