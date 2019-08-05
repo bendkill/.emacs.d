@@ -21,7 +21,7 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode flycheck flycheck-cython cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+    (elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
  '(safe-local-variable-values
    (quote
     ((TeX-command-extra-options . "-shell-escape")
@@ -52,10 +52,15 @@
   (package-install 'use-package))
 (require 'use-package)
 
+
 ;; themes and appearance
-(use-package kaolin-themes)
-(load-theme 'kaolin-ocean t)
-(kaolin-treemacs-theme)
+(load-theme 'zenburn t)
+
+;; startup
+(setq inhibit-startup-message t)
+(setq inhibit-startup-buffer-menu t)
+(setq inhibit-startup-screen t
+      initial-buffer-choice  nil)
 
 ;; change the mode-line
 (use-package smart-mode-line)
@@ -81,7 +86,9 @@
  ("C-M-f" . forward-whitespace)
  ("M-," . previous-buffer)
  ("C-M-p" . comint-previous-input)
- ("C-M-n" . comint-next-input))
+ ("C-M-n" . comint-next-input)
+ ("M-s M-s" . rgrep)
+ ("C-c C-l" . global-linum-mode))
 
 (bind-key* "C-c l" '(lambda() (interactive) (load-file "~/.emacs.d/init.el")
                       (unless (display-graphic-p (selected-frame))
@@ -171,7 +178,7 @@ point reaches the beginning or end of the buffer, stop there."
           'smarter-move-beginning-of-line)
 
 ;; Miscellaneous variable assignments
-(setq-default fill-column 80)
+(setq-default fill-column 79)
 
 ;; Haskell mode
 (use-package haskell-mode)              ;TODO: check
@@ -264,21 +271,21 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'find-file-hook 'enable-minor-mode-based-on-extension)
 
 ;; Olivetti mode for various docs:
-(defvar olivetti-body-width 82)
-(setq auto-minor-mode-alist
-      (cons '("\\.txt\\'" . olivetti-mode)
-            auto-minor-mode-alist))
-(setq auto-minor-mode-alist
-      (cons '("\\.tex\\'" . olivetti-mode)
-            auto-minor-mode-alist))
+;; (defvar olivetti-body-width 82)
+;; (setq auto-minor-mode-alist
+;;       (cons '("\\.txt\\'" . olivetti-mode)
+;;             auto-minor-mode-alist))
+;; (setq auto-minor-mode-alist
+;;       (cons '("\\.tex\\'" . olivetti-mode)
+;;             auto-minor-mode-alist))
 
-;; autofill mode, same thing
-(setq auto-minor-mode-alist
-      (cons '("\\.txt\\'" . auto-fill-mode)
-            auto-minor-mode-alist))
-(setq auto-minor-mode-alist
-      (cons '("\\.tex\\'" . auto-fill-mode)
-            auto-minor-mode-alist))
+;; ;; autofill mode, same thing
+;; (setq auto-minor-mode-alist
+;;       (cons '("\\.txt\\'" . auto-fill-mode)
+;;             auto-minor-mode-alist))
+;; (setq auto-minor-mode-alist
+;;       (cons '("\\.tex\\'" . auto-fill-mode)
+;;             auto-minor-mode-alist))
 
 
 ;; Auto-complete mode:
@@ -287,38 +294,12 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (ac-set-trigger-key "TAB")
 (use-package auto-complete-auctex)
 
-;; (defun my-csharp-mode-hook ()
-;;   ;; enable the stuff you want for C# here
-;;   ;; (electric-pair-mode 1)       ;; Emacs 24
-;;   ;; (electric-pair-local-mode 1) ;; Emacs 25
-;;   (omnisharp-mode)
-;;   (auto-complete-mode)
-;;   (setq indent-tabs-mode nil)
-;;   (setq c-syntactic-indentation t)
-;;   (c-set-style "ellemtel")
-;;   (setq c-basic-offset 2)
-;;   (setq truncate-lines t)
-;;   (setq tab-width 2)
-;;   (setq evil-shift-width 2)
-;;   (local-set-key (kbd "C-c C-c") 'recompile)
-;;   )
-;; (add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
-;; (eval-after-load
-;;     'company
-;;   '(add-to-list 'company-backends 'company-omnisharp))
-
 ;; Better C stuff
 (add-hook 'c-mode-hook 'auto-complete-mode)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-;; Start icicles for every emacs
-;; (icy-mode 1)
-
-(bind-key* "M-s M-s" 'helm-ag-project-root)
-(bind-key* "M-s M-g" 'helm-ag-buffers)
 
 ;; windmove
 (when (fboundp 'windmove-default-keybindings)
@@ -330,34 +311,53 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (global-set-key (kbd "M-]") 'other-window)
 (bind-key* "C-<return>" 'other-window)
 
-;; use flycheck
-(add-hook 'after-init-hook #'global-flycheck-mode)
-(use-package flycheck-cython)
-(add-hook 'cython-mode-hook 'flycheck-mode)
-
-;; jedi (autocompletion for python)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
-(setq jedi:use-shortcuts 1)
+;; python config
+(use-package elpy
+  :ensure t
+  :defer t
+  :init
+  (advice-add 'python-mode :before 'elpy-enable))
+(setq elpy-rpc-python-command "python3")
+(setq python-shell-interpreter "ipython3"
+      python-shell-interpreter-args "-i --simple-prompt")
+(use-package py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+(setq py-autopep8-options '("--max-line-length=100"))
+(setq py-autopep8-options '("--indent-size=2"))
 
 ;; auto-docstrings in python
 (use-package sphinx-doc)
 (add-hook 'python-mode-hook (lambda ()
                               (sphinx-doc-mode t)
-                              (bind-key* "C-c C-d" 'sphinx-doc)))
+                              (bind-key* "C-c C-s" 'sphinx-doc)
+                              (setq paragraph-start (concat paragraph-start ))))
 
-;; python shell
-(setq
- python-shell-interpreter "ipython3"
- python-shell-interpreter-args "--colors=Linux --profile=default"
- python-shell-prompt-regexp "In \\[[0-9]+\\]: "
- python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
- python-shell-completion-setup-code
- "from IPython.core.completerlib import module_completion"
- python-shell-completion-module-string-code
- "';'.join(module_completion('''%s'''))\n"
- python-shell-completion-string-code
- "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+
+(use-package yasnippet)
+(yas-global-mode 1)
+(defun python-args-to-google-docstring (text &optional make-fields)
+  "Return a reST docstring format for the python arguments in yas-text."
+  (let* ((indent (concat "\n" (make-string (current-column) 32)))
+         (args (python-split-args text))
+     (nr 0)
+         (formatted-args
+      (mapconcat
+       (lambda (x)
+         (concat "   " (nth 0 x)
+             (if make-fields (format " ${%d:arg%d}" (cl-incf nr) nr))
+             (if (nth 1 x) (concat " \(default " (nth 1 x) "\)"))))
+       args
+       indent)))
+    (unless (string= formatted-args "")
+      (concat
+       (mapconcat 'identity
+          (list "" "Args:" formatted-args)
+          indent)
+       "\n"))))
+;; (define-key yas-minor-mode-map (kbd "<tab>") nil)
+;; (define-key yas-minor-mode-map (kbd "TAB") nil)
+(define-key yas-minor-mode-map (kbd "C-c y") 'yas-expand)
+
 
 ;; pandoc mode
 (add-hook 'markdown-mode-hook 'pandoc-mode)
