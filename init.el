@@ -21,7 +21,7 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes jedi sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+    (auto-package-update ensime elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode omnisharp olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
  '(safe-local-variable-values
    (quote
     ((TeX-command-extra-options . "-shell-escape")
@@ -84,7 +84,7 @@
  ("C-c d" . delete-trailing-whitespace)
  ("C--"   . undo)
  ("C-M-f" . forward-whitespace)
- ("M-," . previous-buffer)
+ ;; ("M-," . previous-buffer)
  ("C-M-p" . comint-previous-input)
  ("C-M-n" . comint-next-input)
  ("M-s M-s" . rgrep)
@@ -324,6 +324,10 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 (setq py-autopep8-options '("--max-line-length=100"))
 (setq py-autopep8-options '("--indent-size=2"))
+(add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
+(add-hook 'elpy-mode-hook (lambda ()
+                            (bind-key* "C-x M-." 'elpy-goto-definition-other-window)
+                            (bind-key* "M-," 'pop-tag-mark))
 
 ;; auto-docstrings in python
 (use-package sphinx-doc)
