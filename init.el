@@ -21,7 +21,7 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (auto-package-update ensime elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+    (csv-mode auto-package-update ensime elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
  '(safe-local-variable-values
    (quote
     ((TeX-command-extra-options . "-shell-escape")
