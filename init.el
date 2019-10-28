@@ -21,7 +21,7 @@
       font-latex-italic-face command))))
  '(package-selected-packages
    (quote
-    (csv-mode auto-package-update ensime elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
+    (dash-alfred dash-at-point csv-mode auto-package-update ensime elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
  '(safe-local-variable-values
    (quote
     ((TeX-command-extra-options . "-shell-escape")
@@ -81,7 +81,7 @@
  ("C-x a" . align-regexp)
  ("C-c r" . replace-string)
  ("C-c C-r" . replace-regexp)
- ("C-c d" . delete-trailing-whitespace)
+ ;; ("C-c d" . delete-trailing-whitespace)
  ("C--"   . undo)
  ("C-M-f" . forward-whitespace)
  ;; ("M-," . previous-buffer)
@@ -102,6 +102,9 @@
                                              (region-end)
                                              "pbcopy" (messages-buffer))))
 
+
+;; save my place in documents
+(save-place-mode 1)
 
 
 (defun xah-forward-block (&optional n)
@@ -321,11 +324,12 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (setq python-shell-interpreter "ipython3"
       python-shell-interpreter-args "-i --simple-prompt")
 (use-package py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 (setq py-autopep8-options '("--max-line-length=100"))
 (setq py-autopep8-options '("--indent-size=2"))
 (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
 (add-hook 'elpy-mode-hook (lambda ()
+                            (bind-key* "C-c p" 'py-autopep8-enable-on-save)
                             (bind-key* "C-x M-." 'elpy-goto-definition-other-window)
                             (bind-key* "M-," 'pop-tag-mark)))
 
