@@ -55,7 +55,7 @@
 
 
 ;; themes and appearance
-(load-theme 'solarized-dark t)
+(load-theme 'zenburn t)
 
 ;; startup
 (setq inhibit-startup-message t)
