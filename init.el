@@ -36,10 +36,13 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ;; adjust the background of the loaded theme
+;; (defun on-after-init ()
+;;   (unless (display-graphic-p (selected-frame))
+;;     (set-face-background 'default "unspecified-bg" (selected-frame))))
 (defun on-after-init ()
   (unless (display-graphic-p (selected-frame))
     (set-face-background 'default "unspecified-bg" (selected-frame))))
-;; (add-hook 'window-setup-hook 'on-after-init)
+(add-hook 'window-setup-hook 'on-after-init)
 
 ;; Using Melpa
 (require 'package)
@@ -509,5 +512,13 @@ FORCE, always inserts ' characters."
   :pin melpa-stable)
 
 (use-package auto-package-update)
+
+;; ITERM2 MOUSE SUPPORT
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (defun track-mouse (e)) 
+  (setq mouse-sel-mode t)
+  )
 
 ;;; init.el ends here
