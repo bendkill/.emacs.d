@@ -5,31 +5,7 @@
 ;;; Code:
 
 ;; should be at top
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-quickhelp-color-background "#4F4F4F")
- '(company-quickhelp-color-foreground "#DCDCCC")
- '(cursor-type (quote bar))
- '(custom-safe-themes
-   (quote
-    ("84890723510d225c45aaff941a7e201606a48b973f0121cb9bcb0b9399be8cba" "0598c6a29e13e7112cfbc2f523e31927ab7dce56ebb2016b567e1eff6dc1fd4f" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "bc75dfb513af404a26260b3420d1f3e4131df752c19ab2984a7c85def9a2917e" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
- '(font-latex-user-keyword-classes
-   (quote
-    (("think"
-      (("think" "{"))
-      font-latex-italic-face command))))
- '(package-selected-packages
-   (quote
-    (solarized-theme dash-alfred dash-at-point csv-mode auto-package-update ensime elpy elpygen py-autopep8 better-defaults zenburn-theme racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auto-complete-auctex auctex)))
- '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
- '(safe-local-variable-values
-   (quote
-    ((TeX-command-extra-options . "-shell-escape")
-     (tex-master . "vanesh"))))
- '(send-mail-function (quote mailclient-send-it)))
+
 
 
 ;; emacs load path
@@ -240,11 +216,7 @@ point reaches the beginning or end of the buffer, stop there."
  '(cursor ((t (:background "#ec37d8"))))
  '(font-latex-italic-face ((t (:inherit italic :foreground "brightred"))))
  '(font-latex-math-face ((t (:foreground "cyan"))))
- '(font-latex-sectioning-0-face ((t (:inherit font-latex-sectioning-1-face :height 1.1))))
- '(font-latex-sectioning-1-face ((t (:inherit font-latex-sectioning-2-face :height 1.1))))
- '(font-latex-sectioning-5-face ((t (:foreground "brightyellow" :weight bold))))
  '(font-latex-sedate-face ((t (:foreground "color-29"))))
- '(font-latex-string-face ((t (:foreground "color-173"))))
  '(markdown-markup-face ((t (:inherit shadow :foreground "color-129" :slant normal :weight normal))))
  '(mouse ((t nil))))
 
@@ -522,3 +494,11 @@ FORCE, always inserts ' characters."
   )
 
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default))))
