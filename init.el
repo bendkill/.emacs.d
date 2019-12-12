@@ -168,7 +168,7 @@ point reaches the beginning or end of the buffer, stop there."
           'smarter-move-beginning-of-line)
 
 ;; Miscellaneous variable assignments
-(setq-default fill-column 79)
+(setq-default fill-column 119)
 
 ;; Haskell mode
 (use-package haskell-mode)              ;TODO: check
