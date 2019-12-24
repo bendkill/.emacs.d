@@ -257,7 +257,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'find-file-hook 'enable-minor-mode-based-on-extension)
 
 ;; Olivetti mode for various docs:
-;; (defvar olivetti-body-width 82)
+(defvar olivetti-body-width 120)
 ;; (setq auto-minor-mode-alist
 ;;       (cons '("\\.txt\\'" . olivetti-mode)
 ;;             auto-minor-mode-alist))
