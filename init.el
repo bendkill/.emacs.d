@@ -168,7 +168,7 @@ point reaches the beginning or end of the buffer, stop there."
           'smarter-move-beginning-of-line)
 
 ;; Miscellaneous variable assignments
-(setq-default fill-column 119)
+(setq-default fill-column 99)
 
 ;; Haskell mode
 (use-package haskell-mode)              ;TODO: check
@@ -218,12 +218,13 @@ point reaches the beginning or end of the buffer, stop there."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(cursor ((t (:background "#ec37d8"))))
  '(font-latex-italic-face ((t (:inherit italic :foreground "brightred"))))
  '(font-latex-math-face ((t (:foreground "cyan"))))
  '(font-latex-sedate-face ((t (:foreground "color-29"))))
  '(markdown-markup-face ((t (:inherit shadow :foreground "color-129" :slant normal :weight normal))))
- '(mouse ((t nil))))
+ '(mouse ((t nil)))
+ '(region ((t (:background "color-16"))))
+ '(set-face-attribute (quote region) nil :background))
 
 ;; Backing up files (might be working?)
 (setq backup-directory-alist
@@ -257,7 +258,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'find-file-hook 'enable-minor-mode-based-on-extension)
 
 ;; Olivetti mode for various docs:
-(defvar olivetti-body-width 120)
+(defvar olivetti-body-width 100)
 ;; (setq auto-minor-mode-alist
 ;;       (cons '("\\.txt\\'" . olivetti-mode)
 ;;             auto-minor-mode-alist))
