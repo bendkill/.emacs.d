@@ -15,7 +15,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default))))
+    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
+ '(package-selected-packages
+   (quote
+    (magit py-autopep8 ensime magit-popup elpy zenburn-theme use-package sml-mode smart-mode-line haskell-mode auto-complete-auctex))))
 
 ;; Using Melpa
 (require 'package)
@@ -485,9 +488,9 @@ FORCE, always inserts ' characters."
                                   indent-tabs-mode nil)))
 
 ;; scala shit
-(use-package ensime
-  :ensure t
-  :pin melpa-stable)
+;; (use-package ensime
+;;   :ensure t
+;;   :pin melpa-stable)
 
 (use-package auto-package-update)
 
