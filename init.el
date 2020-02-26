@@ -15,7 +15,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default))))
+    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
+ '(package-selected-packages
+   (quote
+    (smooth-scroll zotelo zmq zeno-theme zenburn-theme use-package synonyms sphinx-doc solarized-theme sml-mode smart-mode-line-powerline-theme smart-mode-line-atom-one-dark-theme shut-up seq s-buffer racket-mode py-autopep8 pov-mode pkg-info pandoc-mode olivetti nyan-mode night-owl-theme minesweeper mediawiki markdown-mode magit-popup magit kaolin-themes jedi-direx irony icicles highlight-numbers helm-ag haskell-mode git ghub+ fireplace exec-path-from-shell evil-visual-mark-mode ensime elpygen elpy ein dracula-theme doom-modeline dash-at-point dash-alfred cython-mode csv-mode csharp-mode chess better-defaults auto-package-update auto-complete-auctex auctex arjen-grey-theme anaconda-mode abyss-theme))))
 
 ;; Using Melpa
 (require 'package)
@@ -498,5 +501,15 @@ FORCE, always inserts ' characters."
   (defun track-mouse (e)) 
   (setq mouse-sel-mode t)
   )
+
+(use-package smooth-scroll
+  :config
+  (smooth-scroll-mode 1)
+  (setq smooth-scroll/vscroll-step-size 5))
+
+;; Enable mouse support
+(unless window-system
+  (global-set-key (kbd "<mouse-4>") 'scroll-down)
+  (global-set-key (kbd "<mouse-5>") 'scroll-up))
 
 ;;; init.el ends here
