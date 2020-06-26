@@ -502,9 +502,9 @@ FORCE, always inserts ' characters."
                                   indent-tabs-mode nil)))
 
 ;; scala shit
-(use-package ensime
-  :ensure t
-  :pin melpa-stable)
+;; (use-package ensime
+;;   :ensure t
+;;   :pin melpa-stable)
 
 (use-package auto-package-update)
 
