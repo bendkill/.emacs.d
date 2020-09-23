@@ -18,7 +18,8 @@
     ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (smooth-scroll zotelo zmq zeno-theme zenburn-theme use-package synonyms sphinx-doc solarized-theme sml-mode smart-mode-line-powerline-theme smart-mode-line-atom-one-dark-theme shut-up seq s-buffer racket-mode py-autopep8 pov-mode pkg-info pandoc-mode olivetti nyan-mode night-owl-theme minesweeper mediawiki markdown-mode magit-popup magit kaolin-themes jedi-direx irony icicles highlight-numbers helm-ag haskell-mode git ghub+ fireplace exec-path-from-shell evil-visual-mark-mode ensime elpygen elpy ein dracula-theme doom-modeline dash-at-point dash-alfred cython-mode csv-mode csharp-mode chess better-defaults auto-package-update auto-complete-auctex auctex arjen-grey-theme anaconda-mode abyss-theme))))
+    (stan-mode multi-web-mode web-mode mmm-mode js2-mode yaml-mode smooth-scroll zotelo zmq zeno-theme zenburn-theme use-package synonyms sphinx-doc solarized-theme sml-mode smart-mode-line-powerline-theme smart-mode-line-atom-one-dark-theme shut-up seq s-buffer racket-mode py-autopep8 pov-mode pkg-info pandoc-mode olivetti nyan-mode night-owl-theme minesweeper mediawiki markdown-mode magit-popup magit kaolin-themes jedi-direx irony icicles highlight-numbers helm-ag haskell-mode git ghub+ fireplace exec-path-from-shell evil-visual-mark-mode ensime elpygen elpy ein dracula-theme doom-modeline dash-at-point dash-alfred cython-mode csv-mode csharp-mode chess better-defaults auto-package-update auto-complete-auctex auctex arjen-grey-theme anaconda-mode abyss-theme)))
+ '(safe-local-variable-values (quote ((TeX-command-extra-options . "-shell-escape")))))
 
 ;; Using Melpa
 (require 'package)
@@ -78,7 +79,8 @@
  ("C-M-p" . comint-previous-input)
  ("C-M-n" . comint-next-input)
  ("M-s M-s" . rgrep)
- ("C-c C-l" . global-linum-mode))
+ ("C-c C-l" . global-linum-mode)
+ ("C-c C-p" . py-autopep8-buffer))
 
 (bind-key* "C-c l" '(lambda() (interactive) (load-file "~/.emacs.d/init.el")
                       (unless (display-graphic-p (selected-frame))
@@ -124,10 +126,10 @@ Version 2016-06-15"
 (bind-key* "M-n" '(lambda() (interactive) (xah-forward-block) (previous-line)))
 
 ;; deal with tabs
-(setq default-tab-width 2)
+(setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
-(setq python-indent-offset 2)
-(setq sml-indent-level 2)
+(setq python-indent-offset 4)
+(setq sml-indent-level 4)
 (setq c-default-style "bsd"
       c-basic-offset 4)
 
@@ -308,7 +310,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
   :init
   (advice-add 'python-mode :before 'elpy-enable))
 (setq elpy-rpc-python-command "python3")
-(setq python-shell-interpreter "ipython3"
+(setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt")
 (use-package py-autopep8)
 ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
@@ -353,9 +355,45 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;; (define-key yas-minor-mode-map (kbd "TAB") nil)
 (define-key yas-minor-mode-map (kbd "C-c y") 'yas-expand)
 
+;; open current file in external app
+(defun xah-open-in-external-app (&optional @fname)
+  "Open the current file or dired marked files in external app.
+The app is chosen from your OS's preference.
 
-;; pandoc mode
+When called in emacs lisp, if @fname is given, open that.
+
+URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2019-11-04"
+  (interactive)
+  (let* (
+         ($file-list
+          (if @fname
+              (progn (list @fname))
+            (if (string-equal major-mode "dired-mode")
+                (dired-get-marked-files)
+              (list (buffer-file-name)))))
+         ($do-it-p (if (<= (length $file-list) 5)
+                       t
+                     (y-or-n-p "Open more than 5 files? "))))
+    (when $do-it-p
+      (cond
+       ((string-equal system-type "windows-nt")
+        (mapc
+         (lambda ($fpath)
+           (w32-shell-execute "open" $fpath)) $file-list))
+       ((string-equal system-type "darwin")
+        (mapc
+         (lambda ($fpath)
+           (shell-command
+            (concat "open " (shell-quote-argument $fpath))))  $file-list))
+       ((string-equal system-type "gnu/linux")
+        (mapc
+         (lambda ($fpath) (let ((process-connection-type nil))
+                            (start-process "" nil "xdg-open" $fpath))) $file-list))))))
+
+;; markdown hooks
 (add-hook 'markdown-mode-hook 'pandoc-mode)
+(setq markdown-open-command 'xah-open-in-external-app)
 
 (defun mg-TeX-insert-single-quote (force)
   "Insert the appropriate quotation marks for TeX.
@@ -483,8 +521,8 @@ FORCE, always inserts ' characters."
 
 ;; java shit
 (add-hook 'java-mode-hook (lambda ()
-                            (setq c-basic-offset 2
-                                  tab-width 2
+                            (setq c-basic-offset 4
+                                  tab-width 4
                                   indent-tabs-mode nil)))
 
 ;; scala shit
@@ -505,11 +543,24 @@ FORCE, always inserts ' characters."
 (use-package smooth-scroll
   :config
   (smooth-scroll-mode 1)
-  (setq smooth-scroll/vscroll-step-size 5))
+  (setq smooth-scroll/vscroll-step-size 15))
 
 ;; Enable mouse support
 (unless window-system
   (global-set-key (kbd "<mouse-4>") 'scroll-down)
   (global-set-key (kbd "<mouse-5>") 'scroll-up))
+
+;; javascript
+(setq indent-tabs-mode nil
+      js-indent-level 4)
+(require 'multi-web-mode)
+(setq mweb-default-major-mode 'html-mode)
+(setq mweb-tags 
+  '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+    (js-mode  "<script[^>]*>" "</script>")
+    (css-mode "<style[^>]*>" "</style>")))
+(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
+(multi-web-global-mode 1)
+
 
 ;;; init.el ends here
