@@ -326,7 +326,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (use-package sphinx-doc)
 (add-hook 'python-mode-hook (lambda ()
                               (sphinx-doc-mode t)
-                              (bind-key* "C-c C-s" 'sphinx-doc)
+                              (bind-key "C-c C-s" 'sphinx-doc)
                               (setq paragraph-start (concat paragraph-start ))))
 
 
