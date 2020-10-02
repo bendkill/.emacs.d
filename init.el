@@ -4,40 +4,22 @@
 ;;
 ;;; Code:
 
+;; emacs load path
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
 ;; should be at top
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(cursor-type (quote bar))
  '(custom-safe-themes
    (quote
-    ("0598c6a29e13e7112cfbc2f523e31927ab7dce56ebb2016b567e1eff6dc1fd4f" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "bc75dfb513af404a26260b3420d1f3e4131df752c19ab2984a7c85def9a2917e" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
- '(font-latex-user-keyword-classes
-   (quote
-    (("think"
-      (("think" "{"))
-      font-latex-italic-face command))))
+    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (solarized-theme zenburn-theme auto-complete-auctex auctex-latexmk auctex-lua dash-alfred dash-at-point csv-mode auto-package-update ensime elpy elpygen py-autopep8 better-defaults racket-mode evil-visual-mark-mode sml-mode yasnippet-snippets jedi-direx helm-ag nyan-mode smart-mode-line-atom-one-dark-theme smart-mode-line-powerline-theme smart-mode-line doom-modeline arjen-grey-theme abyss-theme dracula-theme magit-popup magit highlight-numbers kaolin-themes sphinx-doc irony pov-mode markdown-mode js2-mode ein anaconda-mode cython-mode zotelo synonyms s-buffer pandoc-mode olivetti minesweeper mediawiki icicles helm git fireplace exec-path-from-shell chess auctex)))
- '(safe-local-variable-values
-   (quote
-    ((TeX-master . t)
-     (TeX-command-extra-options . "-shell-escape")
-     (tex-master . "vanesh"))))
- '(send-mail-function (quote mailclient-send-it)))
-
-
-;; emacs load path
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-
-;; adjust the background of the loaded theme
-(defun on-after-init ()
-  (unless (display-graphic-p (selected-frame))
-    (set-face-background 'default "unspecified-bg" (selected-frame))))
-(add-hook 'window-setup-hook 'on-after-init)
+    (stan-mode multi-web-mode web-mode mmm-mode js2-mode yaml-mode smooth-scroll zotelo zmq zeno-theme zenburn-theme use-package synonyms sphinx-doc solarized-theme sml-mode smart-mode-line-powerline-theme smart-mode-line-atom-one-dark-theme shut-up seq s-buffer racket-mode py-autopep8 pov-mode pkg-info pandoc-mode olivetti nyan-mode night-owl-theme minesweeper mediawiki markdown-mode magit-popup magit kaolin-themes jedi-direx irony icicles highlight-numbers helm-ag haskell-mode git ghub+ fireplace exec-path-from-shell evil-visual-mark-mode ensime elpygen elpy ein dracula-theme doom-modeline dash-at-point dash-alfred cython-mode csv-mode csharp-mode chess better-defaults auto-package-update auto-complete-auctex auctex arjen-grey-theme anaconda-mode abyss-theme)))
+ '(safe-local-variable-values (quote ((TeX-command-extra-options . "-shell-escape")))))
 
 ;; Using Melpa
 (require 'package)
@@ -53,9 +35,17 @@
   (package-install 'use-package))
 (require 'use-package)
 
-
 ;; themes and appearance
 (load-theme 'zenburn t)
+
+;; adjust the background of the loaded theme
+;; (defun on-after-init ()
+;;   (unless (display-graphic-p (selected-frame))
+;;     (set-face-background 'default "unspecified-bg" (selected-frame))))
+(defun on-after-init ()
+  (unless (display-graphic-p (selected-frame))
+    (set-face-background 'default "unspecified-bg" (selected-frame))))
+(add-hook 'window-setup-hook 'on-after-init)
 
 ;; startup
 (setq inhibit-startup-message t)
@@ -89,7 +79,8 @@
  ("C-M-p" . comint-previous-input)
  ("C-M-n" . comint-next-input)
  ("M-s M-s" . rgrep)
- ("C-c C-l" . global-linum-mode))
+ ("C-c C-l" . global-linum-mode)
+ ("C-c C-p" . py-autopep8-buffer))
 
 (bind-key* "C-c l" '(lambda() (interactive) (load-file "~/.emacs.d/init.el")
                       (unless (display-graphic-p (selected-frame))
@@ -135,10 +126,10 @@ Version 2016-06-15"
 (bind-key* "M-n" '(lambda() (interactive) (xah-forward-block) (previous-line)))
 
 ;; deal with tabs
-(setq default-tab-width 2)
+(setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
-(setq python-indent-offset 2)
-(setq sml-indent-level 2)
+(setq python-indent-offset 4)
+(setq sml-indent-level 4)
 (setq c-default-style "bsd"
       c-basic-offset 4)
 
@@ -182,7 +173,7 @@ point reaches the beginning or end of the buffer, stop there."
           'smarter-move-beginning-of-line)
 
 ;; Miscellaneous variable assignments
-(setq-default fill-column 79)
+(setq-default fill-column 99)
 
 ;; Haskell mode
 (use-package haskell-mode)              ;TODO: check
@@ -232,16 +223,13 @@ point reaches the beginning or end of the buffer, stop there."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(cursor ((t (:background "#ec37d8"))))
  '(font-latex-italic-face ((t (:inherit italic :foreground "brightred"))))
  '(font-latex-math-face ((t (:foreground "cyan"))))
- '(font-latex-sectioning-0-face ((t (:inherit font-latex-sectioning-1-face :height 1.1))))
- '(font-latex-sectioning-1-face ((t (:inherit font-latex-sectioning-2-face :height 1.1))))
- '(font-latex-sectioning-5-face ((t (:foreground "brightyellow" :weight bold))))
  '(font-latex-sedate-face ((t (:foreground "color-29"))))
- '(font-latex-string-face ((t (:foreground "color-173"))))
  '(markdown-markup-face ((t (:inherit shadow :foreground "color-129" :slant normal :weight normal))))
- '(mouse ((t nil))))
+ '(mouse ((t nil)))
+ '(region ((t (:background "color-16"))))
+ '(set-face-attribute (quote region) nil :background))
 
 ;; Backing up files (might be working?)
 (setq backup-directory-alist
@@ -275,7 +263,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (add-hook 'find-file-hook 'enable-minor-mode-based-on-extension)
 
 ;; Olivetti mode for various docs:
-;; (defvar olivetti-body-width 82)
+(defvar olivetti-body-width 100)
 ;; (setq auto-minor-mode-alist
 ;;       (cons '("\\.txt\\'" . olivetti-mode)
 ;;             auto-minor-mode-alist))
@@ -322,7 +310,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
   :init
   (advice-add 'python-mode :before 'elpy-enable))
 (setq elpy-rpc-python-command "python3")
-(setq python-shell-interpreter "ipython3"
+(setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt")
 (use-package py-autopep8)
 ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
@@ -338,7 +326,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (use-package sphinx-doc)
 (add-hook 'python-mode-hook (lambda ()
                               (sphinx-doc-mode t)
-                              (bind-key* "C-c C-s" 'sphinx-doc)
+                              (bind-key "C-c C-s" 'sphinx-doc)
                               (setq paragraph-start (concat paragraph-start ))))
 
 
@@ -367,9 +355,45 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;; (define-key yas-minor-mode-map (kbd "TAB") nil)
 (define-key yas-minor-mode-map (kbd "C-c y") 'yas-expand)
 
+;; open current file in external app
+(defun xah-open-in-external-app (&optional @fname)
+  "Open the current file or dired marked files in external app.
+The app is chosen from your OS's preference.
 
-;; pandoc mode
+When called in emacs lisp, if @fname is given, open that.
+
+URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2019-11-04"
+  (interactive)
+  (let* (
+         ($file-list
+          (if @fname
+              (progn (list @fname))
+            (if (string-equal major-mode "dired-mode")
+                (dired-get-marked-files)
+              (list (buffer-file-name)))))
+         ($do-it-p (if (<= (length $file-list) 5)
+                       t
+                     (y-or-n-p "Open more than 5 files? "))))
+    (when $do-it-p
+      (cond
+       ((string-equal system-type "windows-nt")
+        (mapc
+         (lambda ($fpath)
+           (w32-shell-execute "open" $fpath)) $file-list))
+       ((string-equal system-type "darwin")
+        (mapc
+         (lambda ($fpath)
+           (shell-command
+            (concat "open " (shell-quote-argument $fpath))))  $file-list))
+       ((string-equal system-type "gnu/linux")
+        (mapc
+         (lambda ($fpath) (let ((process-connection-type nil))
+                            (start-process "" nil "xdg-open" $fpath))) $file-list))))))
+
+;; markdown hooks
 (add-hook 'markdown-mode-hook 'pandoc-mode)
+(setq markdown-open-command 'xah-open-in-external-app)
 
 (defun mg-TeX-insert-single-quote (force)
   "Insert the appropriate quotation marks for TeX.
@@ -497,8 +521,8 @@ FORCE, always inserts ' characters."
 
 ;; java shit
 (add-hook 'java-mode-hook (lambda ()
-                            (setq c-basic-offset 2
-                                  tab-width 2
+                            (setq c-basic-offset 4
+                                  tab-width 4
                                   indent-tabs-mode nil)))
 
 ;; scala shit
@@ -507,5 +531,36 @@ FORCE, always inserts ' characters."
 ;;   :pin melpa-stable)
 
 (use-package auto-package-update)
+
+;; ITERM2 MOUSE SUPPORT
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (defun track-mouse (e)) 
+  (setq mouse-sel-mode t)
+  )
+
+(use-package smooth-scroll
+  :config
+  (smooth-scroll-mode 1)
+  (setq smooth-scroll/vscroll-step-size 15))
+
+;; Enable mouse support
+(unless window-system
+  (global-set-key (kbd "<mouse-4>") 'scroll-down)
+  (global-set-key (kbd "<mouse-5>") 'scroll-up))
+
+;; javascript
+(setq indent-tabs-mode nil
+      js-indent-level 4)
+(require 'multi-web-mode)
+(setq mweb-default-major-mode 'html-mode)
+(setq mweb-tags 
+  '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+    (js-mode  "<script[^>]*>" "</script>")
+    (css-mode "<style[^>]*>" "</style>")))
+(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
+(multi-web-global-mode 1)
+
 
 ;;; init.el ends here
