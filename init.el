@@ -315,7 +315,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (use-package py-autopep8)
 ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 (setq py-autopep8-options '("--max-line-length=100"))
-(setq py-autopep8-options '("--indent-size=2"))
+(setq py-autopep8-options '("--indent-size=4"))
 (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
 (add-hook 'elpy-mode-hook (lambda ()
                             (bind-key* "C-c p" 'py-autopep8-enable-on-save)
