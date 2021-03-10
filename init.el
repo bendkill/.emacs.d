@@ -18,8 +18,11 @@
     ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (stan-mode multi-web-mode web-mode mmm-mode js2-mode yaml-mode smooth-scroll zotelo zmq zeno-theme zenburn-theme use-package synonyms sphinx-doc solarized-theme sml-mode smart-mode-line-powerline-theme smart-mode-line-atom-one-dark-theme shut-up seq s-buffer racket-mode py-autopep8 pov-mode pkg-info pandoc-mode olivetti nyan-mode night-owl-theme minesweeper mediawiki markdown-mode magit-popup magit kaolin-themes jedi-direx irony icicles highlight-numbers helm-ag haskell-mode git ghub+ fireplace exec-path-from-shell evil-visual-mark-mode ensime elpygen elpy ein dracula-theme doom-modeline dash-at-point dash-alfred cython-mode csv-mode csharp-mode chess better-defaults auto-package-update auto-complete-auctex auctex arjen-grey-theme anaconda-mode abyss-theme)))
- '(safe-local-variable-values (quote ((TeX-command-extra-options . "-shell-escape")))))
+    (company-ctags ctags-update stan-mode multi-web-mode web-mode mmm-mode js2-mode yaml-mode smooth-scroll zotelo zmq zeno-theme zenburn-theme use-package synonyms sphinx-doc solarized-theme sml-mode smart-mode-line-powerline-theme smart-mode-line-atom-one-dark-theme shut-up seq s-buffer racket-mode py-autopep8 pov-mode pkg-info pandoc-mode olivetti nyan-mode night-owl-theme minesweeper mediawiki markdown-mode magit-popup magit kaolin-themes jedi-direx irony icicles highlight-numbers helm-ag haskell-mode git ghub+ fireplace exec-path-from-shell evil-visual-mark-mode ensime elpygen elpy ein dracula-theme doom-modeline dash-at-point dash-alfred cython-mode csv-mode csharp-mode chess better-defaults auto-package-update auto-complete-auctex auctex arjen-grey-theme anaconda-mode abyss-theme)))
+ '(safe-local-variable-values
+   (quote
+    ((TeX-master . \.\./outline)
+     (TeX-command-extra-options . "-shell-escape")))))
 
 ;; Using Melpa
 (require 'package)
@@ -227,6 +230,7 @@ point reaches the beginning or end of the buffer, stop there."
  '(font-latex-math-face ((t (:foreground "cyan"))))
  '(font-latex-sedate-face ((t (:foreground "color-29"))))
  '(markdown-markup-face ((t (:inherit shadow :foreground "color-129" :slant normal :weight normal))))
+ '(mmm-default-submode-face ((t (:background "black"))))
  '(mouse ((t nil)))
  '(region ((t (:background "color-16"))))
  '(set-face-attribute (quote region) nil :background))
@@ -561,6 +565,45 @@ FORCE, always inserts ' characters."
     (css-mode "<style[^>]*>" "</style>")))
 (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
 (multi-web-global-mode 1)
+
+;; docstrings
+(use-package mmm-mode
+  :ensure t
+  :defer t
+  :commands mmm-mode
+  :init
+  (add-hook 'python-mode-hook 'mmm-mode)
+  :config
+
+  ;; Add python + rst major mode configuration.
+  (defun rst-python-statement-is-docstring (begin)
+    "Return true if beginning of statement is BEGIN."
+    (save-excursion
+      (save-match-data
+        (python-nav-beginning-of-statement)
+        (looking-at-p begin))))
+
+  (defun rst-python-front-verify ()
+    "Verify that we're looking at a python docstring."
+    (rst-python-statement-is-docstring (match-string 0)))
+
+  (setq mmm-parse-when-idle 't)
+  (add-to-list 'mmm-save-local-variables 'adaptive-fill-regexp)
+  (add-to-list 'mmm-save-local-variables 'fill-paragraph-function)
+
+  (mmm-add-classes
+   '((rst-python-docstrings
+      :submode rst-mode
+      :face mmm-comment-submode-face
+      :front "u?\\(\"\"\"\\|\'\'\'\\)"
+      :front-verify rst-python-front-verify
+      :back "~1"
+      :end-not-begin t
+      :save-matches 1
+      :insert ((?d embdocstring nil @ "u\"\"\"" @ _ @ "\"\"\"" @))
+      :delimiter-mode nil)))
+
+  (mmm-add-mode-ext-class 'python-mode nil 'rst-python-docstrings))
 
 
 ;;; init.el ends here
