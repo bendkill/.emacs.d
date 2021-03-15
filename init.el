@@ -398,6 +398,7 @@ Version 2019-11-04"
 ;; markdown hooks
 (add-hook 'markdown-mode-hook 'pandoc-mode)
 (setq markdown-open-command 'xah-open-in-external-app)
+(setq markdown-enable-math t)
 
 (defun mg-TeX-insert-single-quote (force)
   "Insert the appropriate quotation marks for TeX.
